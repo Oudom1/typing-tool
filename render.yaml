@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: typing-tool-api
+    runtime: node
+    plan: free
+    region: singapore
+    repo: https://github.com/Oudom1/typing-tool
+    branch: main
+    buildCommand: npm install && npm run build -w backend && npm run build -w api
+    startCommand: npm start -w api
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: ALLOWED_ORIGINS
+        value: https://oudom1.github.io,http://localhost:5173
