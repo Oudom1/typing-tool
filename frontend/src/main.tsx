@@ -223,14 +223,25 @@ function App() {
       <div className="live-badge">FREE ONLY</div>
     </header>
 
-    <section className="profile-panel panel">
-      <div><span className="eyebrow">ONLINE PROFILE</span><h2>Choose your nickname</h2><p>{profileStatus}</p></div>
-      <div className="profile-actions"><input value={nickname} maxLength={24} onChange={e => setNickname(e.target.value)} placeholder="Your nickname" /><button onClick={syncProfile}>Sync Profile</button></div>
+    <section className={`task-card panel ${isChallenge ? 'challenge-task' : ''}`}>
+      <div className="task-card-main">
+        <div className="task-badge">CURRENT TASK</div>
+        <div><span className="eyebrow">LEVEL {level}</span><h2>{isChallenge ? `Mountain Challenge — Level ${level}` : `Typing Mission — Level ${level}`}</h2><p>{isChallenge ? `Catch ${CHALLENGE_TARGET} falling characters before they reach the valley. You have 3 lives.` : `Complete a ${duration}s ${difficulty} typing test with at least 80% accuracy to unlock Level ${level + 1}.`}</p></div>
+      </div>
+      <div className="task-card-side">
+        <div><span>STATUS</span><strong>{isChallenge ? 'BOSS GAME' : 'ACTIVE'}</strong></div>
+        <div><span>NEXT CHALLENGE</span><strong>LV {nextChallenge}</strong></div>
+      </div>
     </section>
 
     <section className={`level-panel panel ${isChallenge ? 'challenge-ready' : ''}`}>
       <div><span className="eyebrow">LEVEL CAMPAIGN</span><h2>Level {level}</h2><p>{isChallenge ? `Special mountain challenge unlocked at Level ${level}.` : `Complete a test with at least 80% accuracy. Next game challenge: Level ${nextChallenge}.`}</p></div>
       <div className="level-route">{[1,2,3,4,5,6,7,8,9,10].map(n => <span key={n} className={n === level ? 'current' : n < level ? 'cleared' : n === 5 || n === 10 ? 'boss' : ''}>{n}</span>)}</div>
+    </section>
+
+    <section className="profile-panel panel">
+      <div><span className="eyebrow">ONLINE PROFILE</span><h2>Choose your nickname</h2><p>{profileStatus}</p></div>
+      <div className="profile-actions"><input value={nickname} maxLength={24} onChange={e => setNickname(e.target.value)} placeholder="Your nickname" /><button onClick={syncProfile}>Sync Profile</button></div>
     </section>
 
     {!isChallenge && <>
@@ -266,7 +277,7 @@ function App() {
         {!challengeStarted && !gameEnded && <div className="game-overlay"><strong>Ready?</strong><span>A character will fall from the mountain. Press that key before it reaches the valley.</span><button onClick={startChallenge}>Start Level {level}</button></div>}
         {gameEnded && <div className="game-overlay"><strong>{lives > 0 ? 'Challenge cleared!' : 'Try again'}</strong><span>{gameMessage}</span>{lives === 0 && <button onClick={startChallenge}>Retry Level {level}</button>}</div>}
       </div>
-      <div className="game-tip">Keyboard controls only · Level {level >= 10 ? '10+' : '5'} speed · every 5th level is a game challenge</div>
+      <div className="game-tip">Keyboard challenge: press the exact falling character before it reaches the valley.</div>
     </section>}
 
     <section className="insights-grid">
